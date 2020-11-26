@@ -1,105 +1,114 @@
 
 public class TennisGame2 implements TennisGame
 {
-    public int P1point = 0;
-    public int P2point = 0;
+    public int point_player_1 = 0;
+    public int point_player_2 = 0;
     
-    public String P1res = "";
-    public String P2res = "";
-    private String player1Name;
-    private String player2Name;
+    public String res_player_1 = "";
+    public String res_player_2 = "";
+    private String name_player_1;
+    private String name_player_2;
 
-    public TennisGame2(String player1Name, String player2Name) {
-        this.player1Name = player1Name;
-        this.player2Name = player2Name;
+    public TennisGame2(String name_player_1, String name_player_2) {
+        this.name_player_1 = name_player_1;
+        this.name_player_2 = name_player_2;
     }
 
     public String getScore(){
         String score = "";
-        if (P1point == P2point && P1point < 4)
+        if (isEqualScore(point_player_1, point_player_2) && point_player_1 < 4)
         {
-            if (P1point==0)
-                score = "Love";
-            if (P1point==1)
-                score = "Fifteen";
-            if (P1point==2)
-                score = "Thirty";
+            score = getStringOfScore2(score, point_player_1, 0, "Love");
+            score = getStringOfScore2(score, point_player_1, 1, "Fifteen");
+            score = getStringOfScore2(score, point_player_1, 2, "Thirty");
             score += "-All";
         }
-        if (P1point==P2point && P1point>=3)
+        if (isEqualScore(point_player_1, point_player_2) && point_player_1 >=3)
             score = "Deuce";
-        
-        if (P1point > 0 && P2point==0)
+
+        score = getString_FirstPlayerVantageSecondToNull(score);
+
+        if (point_player_2 > 0 && isEqualScore(point_player_1, 0))
         {
-            if (P1point==1)
-                P1res = "Fifteen";
-            if (P1point==2)
-                P1res = "Thirty";
-            if (P1point==3)
-                P1res = "Forty";
-            
-            P2res = "Love";
-            score = P1res + "-" + P2res;
-        }
-        if (P2point > 0 && P1point==0)
-        {
-            if (P2point==1)
-                P2res = "Fifteen";
-            if (P2point==2)
-                P2res = "Thirty";
-            if (P2point==3)
-                P2res = "Forty";
-            
-            P1res = "Love";
-            score = P1res + "-" + P2res;
+            res_player_2 = getStringOfScore2(res_player_2, point_player_2, 1, "Fifteen");
+            res_player_2 = getStringOfScore2(res_player_2, point_player_2, 2, "Thirty");
+            res_player_2 = getStringOfScore2(res_player_2, point_player_2, 3, "Forty");
+
+            res_player_1 = "Love";
+            score = res_player_1 + "-" + res_player_2;
         }
         
-        if (P1point>P2point && P1point < 4)
+        if (point_player_1 > point_player_2 && point_player_1 < 4)
         {
-            if (P1point==2)
-                P1res="Thirty";
-            if (P1point==3)
-                P1res="Forty";
-            if (P2point==1)
-                P2res="Fifteen";
-            if (P2point==2)
-                P2res="Thirty";
-            score = P1res + "-" + P2res;
+            res_player_1 = getScoreString(res_player_1, point_player_1, 2, "Thirty");
+            res_player_1 = getScoreString(res_player_1, point_player_1, 3, "Forty");
+            res_player_2 = getScoreString(res_player_2, point_player_2, 1, "Fifteen");
+            res_player_2 = getScoreString(res_player_2, point_player_2, 2, "Thirty");
+            score = res_player_1 + "-" + res_player_2;
         }
-        if (P2point>P1point && P2point < 4)
+        if (point_player_2 > point_player_1 && point_player_2 < 4)
         {
-            if (P2point==2)
-                P2res="Thirty";
-            if (P2point==3)
-                P2res="Forty";
-            if (P1point==1)
-                P1res="Fifteen";
-            if (P1point==2)
-                P1res="Thirty";
-            score = P1res + "-" + P2res;
+            res_player_2 = getScoreString(res_player_2, point_player_2, 2, "Thirty");
+            res_player_2 = getScoreString(res_player_2, point_player_2, 3, "Forty");
+            res_player_1 = getScoreString(res_player_1, point_player_1, 1, "Fifteen");
+            res_player_1 = getScoreString(res_player_1, point_player_1, 2, "Thirty");
+            score = res_player_1 + "-" + res_player_2;
         }
-        
-        if (P1point > P2point && P2point >= 3)
+
+        score = getScoreStringFirstPlayerAdvantage(score, point_player_1, point_player_2, "Advantage player1");
+
+        score = getScoreStringFirstPlayerAdvantage(score, point_player_2, point_player_1, "Advantage player2");
+
+        score = getScoreFirstPlayerWin(score, point_player_1, point_player_2, "Win for player1");
+        score = getScoreFirstPlayerWin(score, point_player_2, point_player_1, "Win for player2");
+
+        return score;
+    }
+
+    private String getString_FirstPlayerVantageSecondToNull(String score) {
+        if (point_player_1 > 0 && isEqualScore(point_player_2, 0))
         {
-            score = "Advantage player1";
-        }
-        
-        if (P2point > P1point && P1point >= 3)
-        {
-            score = "Advantage player2";
-        }
-        
-        if (P1point>=4 && P2point>=0 && (P1point-P2point)>=2)
-        {
-            score = "Win for player1";
-        }
-        if (P2point>=4 && P1point>=0 && (P2point-P1point)>=2)
-        {
-            score = "Win for player2";
+            res_player_1 = getStringOfScore2(res_player_1, point_player_1, 1, "Fifteen");
+            res_player_1 = getStringOfScore2(res_player_1, point_player_1, 2, "Thirty");
+            res_player_1 = getStringOfScore2(res_player_1, point_player_1, 3, "Forty");
+
+            res_player_2 = "Love";
+            score = res_player_1 + "-" + res_player_2;
         }
         return score;
     }
-    
+
+    private String getScoreFirstPlayerWin(String score, int point_player_1, int point_player_2, String s) {
+        if (point_player_1 >= 4 && point_player_2 >= 0 && (point_player_1 - point_player_2) >= 2) {
+            score = s;
+        }
+        return score;
+    }
+
+    private String getScoreStringFirstPlayerAdvantage(String score, int point_player_1, int point_player_2, String s) {
+        if (point_player_1 > point_player_2 && point_player_2 >= 3) {
+            score = s;
+        }
+        return score;
+    }
+
+    private String getStringOfScore2(String score, int point_player_1, int i, String love) {
+        String score3 = score;
+        score3 = getScoreString(score3, point_player_1, i, love);
+        score = score3;
+        return score;
+    }
+
+    private String getScoreString(String score3, int point_player_1, int i, String love) {
+        if (isEqualScore(point_player_1, i))
+            score3 = love;
+        return score3;
+    }
+
+    private boolean isEqualScore(int point_player_1, int point_player_2) {
+        return point_player_1 == point_player_2;
+    }
+
     public void SetP1Score(int number){
         
         for (int i = 0; i < number; i++)
@@ -119,11 +128,11 @@ public class TennisGame2 implements TennisGame
     }
     
     public void P1Score(){
-        P1point++;
+        point_player_1++;
     }
     
     public void P2Score(){
-        P2point++;
+        point_player_2++;
     }
 
     public void wonPoint(String player) {
